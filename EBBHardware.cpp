@@ -95,25 +95,25 @@ void EBBHardware::enableMotor(int axis, bool state)
     motorEnabled = state;
 }
 
-void EBBHardware::stepperMove(int duration, int axis1, int axis2)
+void EBBHardware::stepperMove(int duration, int numPenSteps, int numRotSteps)
 {
     // if coordinatessystems are identical
     if ((1 == rotStepCorrection) && (1 == penStepCorrection)) {
         // set Coordinates and Speed
-        rotMotor.move(axis2);
-        rotMotor.setSpeed(abs((float)axis2 * (float)1000 / (float)duration));
-        penMotor.move(axis1);
-        penMotor.setSpeed(abs((float)axis1 * (float)1000 / (float)duration));
+        rotMotor.move(numRotSteps);
+        rotMotor.setSpeed(abs((float)numRotSteps * (float)1000 / (float)duration));
+        penMotor.move(numPenSteps);
+        penMotor.setSpeed(abs((float)numPenSteps * (float)1000 / (float)duration));
     } else {
         // incoming EBB-Steps will be multiplied by 16, then Integer-maths is
         // done, result will be divided by 16
         // This make thinks here really complicated, but floating point-math
         // kills performance and memory, believe me... I tried...
-        long rotSteps = ((long)axis2 * 16 / rotStepCorrection) + (long)rotStepError;
+        long rotSteps = ((long)numRotSteps * 16 / rotStepCorrection) + (long)rotStepError;
         // correct incoming EBB-Steps to our
         // microstep-Setting and multiply  by 16 to
         // avoid floatingpoint...
-        long penSteps = ((long)axis1 * 16 / penStepCorrection) + (long)penStepError;
+        long penSteps = ((long)numPenSteps * 16 / penStepCorrection) + (long)penStepError;
 
         // Calc Steps to go, which are possible on our machine
         int rotStepsToGo = (int)(rotSteps / 16);

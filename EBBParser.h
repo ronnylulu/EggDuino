@@ -2,13 +2,7 @@
 
 // implemented Eggbot-Protocol-Version v13
 // EBB-Command-Reference, I sourced from: http://www.schmalzhaus.com/EBB/EBBParser.html
-// no homing sequence, switch-on position of pen will be taken as reference point.
-// No collision-detection!!
-// Supported Servos: I do not know, I use Arduino Servo Lib with TG9e- standard servo.
-// Note: Maximum-Speed in Inkscape is 1000 Steps/s. You could enter more, but then Pythonscript
-// sends nonsense.
-// EBB-Coordinates are coming in for 16th-Microstepmode. The Coordinate-Transforms are done in
-// weired integer-math. Be careful, when you diecide to modify settings.
+
 #include <Stream.h>
 
 class EBBParser {
@@ -19,7 +13,7 @@ public:
 
 protected:
     virtual void enableMotor(int axis, bool state) = 0;
-    virtual void stepperMove(int duration, int penStepsEBB, int rotStepsEBB) = 0;
+    virtual void stepperMove(int duration, int numPenSteps, int numRotSteps) = 0;
     virtual void moveOneStep() = 0;
     virtual void moveToDestination() = 0;
 
